@@ -1,47 +1,49 @@
 (ns examples
   (:require
-    [clj-reload.core :as reload]
-    [clojure.edn :as edn]
-    [clojure.java.io :as io]    
-    [examples.7guis-converter]
-    [examples.animation]
-    [examples.backdrop]
-    [examples.blur]
-    [examples.bmi-calculator]
-    [examples.calculator]
-    [examples.canvas]
-    [examples.canvas-shapes]
-    [examples.checkbox]
-    [examples.effects]
-    [examples.errors]
-    [examples.file-picker]
-    [examples.framerate]
-    [examples.image-snapshot]
-    [examples.link]
-    [examples.oklch]
-    [examples.paragraph]
-    [examples.slider]
-    [examples.stack]
-    [examples.switch]
-    [examples.table]
-    [examples.testbed]
-    [examples.text-field]
-    [examples.text-field-debug]
-    [examples.todomvc]
-    [examples.tooltip]
-    [examples.treemap]
-    [examples.viewport]
-    [examples.whiteboard]
-    [examples.wordle]
-    [io.github.humbleui.app :as app]
-    [io.github.humbleui.debug :as debug]
-    [io.github.humbleui.docs :as docs]
-    [io.github.humbleui.docs.devtools :as devtools]
-    [io.github.humbleui.font :as font]
-    [io.github.humbleui.signal :as signal]
-    [io.github.humbleui.ui :as ui]
-    [io.github.humbleui.util :as util]
-    [io.github.humbleui.window :as window]))
+   [clj-reload.core :as reload]
+   [clojure.edn :as edn]
+   [clojure.java.io :as io]
+   [examples.7guis-converter]
+   [examples.animation]
+   [examples.backdrop]
+   [examples.blur]
+   [examples.bmi-calculator]
+   [examples.calculator]
+   [examples.canvas]
+   [examples.canvas-shapes]
+   [examples.checkbox]
+   [examples.effects]
+   [examples.errors]
+   [examples.file-picker]
+   [examples.framerate]
+   [examples.image-snapshot]
+   [examples.link]
+   [examples.mirrors]
+   [examples.oklch]
+   [examples.paragraph]
+   [examples.sand]
+   [examples.slider]
+   [examples.stack]
+   [examples.switch]
+   [examples.table]
+   [examples.testbed]
+   [examples.text-field]
+   [examples.text-field-debug]
+   [examples.todomvc]
+   [examples.tooltip]
+   [examples.treemap]
+   [examples.viewport]
+   [examples.whiteboard]
+   [examples.wordle]
+   [io.github.humbleui.app :as app]
+   [io.github.humbleui.debug :as debug]
+   [io.github.humbleui.docs :as docs]
+   [io.github.humbleui.docs.devtools :as devtools]
+   [io.github.humbleui.font :as font]
+   [io.github.humbleui.signal :as signal]
+   [io.github.humbleui.ui :as ui]
+   [io.github.humbleui.util :as util]
+   [io.github.humbleui.window :as window]))
 
 (defn load-state []
   (let [file (io/file ".state")]
@@ -108,7 +110,9 @@
      ["Effects" examples.effects/ui]
      ["File Picker" examples.file-picker/ui]
      ["Framerate" examples.framerate/ui]
+     ["Mirrors" examples.mirrors/ui]
      ["OkLCH" examples.oklch/ui]
+     ["Sand" examples.sand/ui]
      ["Table" examples.table/ui]
      ["Todo MVC" examples.todomvc/ui]
      ["Treemap" examples.treemap/ui]
@@ -138,7 +142,7 @@
      (fn [_]
        (reset! *example name))}
     (fn [state]
-      [ui/rect {:paint {:fill 
+      [ui/rect {:paint {:fill
                         (cond
                           (= name @*example) "B2D7FE"
                           (:pressed state)   "A2C7EE"
@@ -195,8 +199,8 @@
       (let [{:keys [scale work-area]} screen
             right  (-> (:right work-area) (/ scale) int)
             bottom (-> (:bottom work-area) (/ scale) int)
-            x      (min (- right 500) x)
-            y      (min (- bottom 500) y)
+            x      (-> x (min (- right 500)) (max 0))
+            y      (-> y (min (- bottom 500)) (max 0))
             width  (min (- right x) width)
             height (min (- bottom y) height)]
         {:screen screen-id, :x x, :y y, :width width, :height height}))))
